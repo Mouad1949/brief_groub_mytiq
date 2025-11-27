@@ -2,6 +2,8 @@
 
 namespace Database\Factories;
 
+use App\Models\Event;
+use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -17,7 +19,11 @@ class TicketFactory extends Factory
     public function definition(): array
     {
         return [
-            //
+             'qr_code' => 'TICKET-' . strtoupper(fake()->bothify('??##??##??')) . '-' . time(),
+            'pdf_path' => 'tickets/ticket-' . fake()->uuid . '.pdf',
+            'purchase_date' => fake()->dateTimeBetween('-1 month', 'now'),
+                    'event_id' => Event::factory(2)->create(),
+                    'user_id' => User::factory(2)->create(),
         ];
     }
 }

@@ -2,6 +2,8 @@
 
 namespace Database\Factories;
 
+use App\Models\Event;
+use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -16,8 +18,12 @@ class EventFactory extends Factory
      */
     public function definition(): array
     {
-        return [
-            //
-        ];
+                return [
+                    'qr_code' => 'TICKET-' . strtoupper(fake()->bothify('??##??##??')) . '-' . time(),
+                    'pdf_path' => 'tickets/ticket-' . fake()->uuid . '.pdf',
+                    'purchase_date' => fake()->dateTimeBetween('-1 month', 'now'),
+                    'user_id' => User::factory(1)->create(), // Crée un user automatiquement
+                    'event_id' => Event::factory(2)->create(),
+                ];
     }
 }
