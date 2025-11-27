@@ -11,7 +11,7 @@ class UpdateEventRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return false;
+        return true;
     }
 
     /**
@@ -22,7 +22,27 @@ class UpdateEventRequest extends FormRequest
     public function rules(): array
     {
         return [
-            //
+            'title'        => 'sometimes|string|max:255',
+            'description'  => 'sometimes|string|max:1000',
+            'localisation' => 'sometimes|string|max:255',
+            'date'         => 'sometimes|date|after:today',
+            'capacite'     => 'sometimes|integer|min:1|max:5000',
+            'image'        => 'sometimes', 
+            'prix'         => 'sometimes|numeric|min:0',
+            'status'       => 'sometimes|in:pending,confirmed,cancelled',
         ];
+    }
+
+    public function message(){
+      return [
+        'title.sometimes'        => 'Le titre est obligatoire.',
+        'description.sometimes'  => 'La description est obligatoire.',
+        'localisation.sometimes' => 'La localisation est obligatoire.',
+        'date.sometimes'         => 'La date est obligatoire.',
+        'capacite.sometimes'     => 'La capacité est obligatoire.',
+        'image.sometimes'        => 'L’image est obligatoire.',
+        'prix.sometimes'         => 'Le prix est obligatoire.',
+        'status.sometimes'       => 'Le statut est obligatoire.',
+      ];
     }
 }
