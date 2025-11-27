@@ -18,12 +18,15 @@ class EventFactory extends Factory
      */
     public function definition(): array
     {
-                return [
-                    'qr_code' => 'TICKET-' . strtoupper(fake()->bothify('??##??##??')) . '-' . time(),
-                    'pdf_path' => 'tickets/ticket-' . fake()->uuid . '.pdf',
-                    'purchase_date' => fake()->dateTimeBetween('-1 month', 'now'),
-                    'user_id' => User::factory(1)->create(), // Crée un user automatiquement
-                    'event_id' => Event::factory(2)->create(),
-                ];
+        return [
+          'title'        => fake()->sentence(3),
+          'description'  => fake()->paragraph(),
+          'localisation' => fake()->city(),
+          'date'         => fake()->dateTimeBetween('+1 days', '+2 months'),
+          'capacite'     => fake()->numberBetween(50, 500),
+          'image'        => fake()->imageUrl(640, 480, 'events', true),
+          'prix'         => fake()->randomFloat(2, 50, 300),
+          'status'       => fake()->randomElement(['pending', 'confirmed', 'cancelled']),
+        ];
     }
 }
