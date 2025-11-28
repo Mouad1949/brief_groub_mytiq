@@ -20,13 +20,14 @@ class EventFactory extends Factory
     {
         return [
           'title'        => fake()->sentence(3),
-          'description'  => fake()->paragraph(),
+          'description'  => fake()->paragraph(3),
           'localisation' => fake()->city(),
           'date'         => fake()->dateTimeBetween('+1 days', '+2 months'),
           'capacite'     => fake()->numberBetween(50, 500),
           'image'        => fake()->imageUrl(640, 480, 'events', true),
           'prix'         => fake()->randomFloat(2, 50, 300),
           'status'       => fake()->randomElement(['pending', 'confirmed', 'cancelled']),
+          'admin_id' =>User::where('role','admin')->get('id')->random()
         ];
     }
 }
