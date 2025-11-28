@@ -27,6 +27,7 @@ class EventFactory extends Factory
           'image'        => fake()->imageUrl(640, 480, 'events', true),
           'prix'         => fake()->randomFloat(2, 50, 300),
           'status'       => fake()->randomElement(['pending', 'confirmed', 'cancelled']),
+          'admin_id' =>User::where('role','admin')->get('id')->random()
         ];
     }
 }
