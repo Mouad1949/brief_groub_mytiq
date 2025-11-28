@@ -26,8 +26,7 @@ class DatabaseSeeder extends Seeder
         //     'email' => 'test@example.com',
         // ]);
         // $this->call([TicketSeeder::class]);
-
-        User::factory(1)->create()->each(function ($admin) {
+User::factory(1)->create()->each(function ($admin) {
         $events = Event::factory(10)->create([
             'admin_id' => $admin->id
         ]);
@@ -40,6 +39,7 @@ class DatabaseSeeder extends Seeder
         });
     });
 
+ 
 
     }
     

@@ -22,13 +22,13 @@ class TicketController extends Controller
     public function index()
     {
         try{
-            $user = User::first();
+            $user = Auth::user();
 
             if (!$user){
                 return response()->json([
                     'success' => false,
-                    'message' => 'Aucun utilisateur trouvé pour testing'
-                ],400);
+                    'message' => 'Utilisateur non connecté'
+                ],401);
             }
             if ($user -> role === 'admin'){
                 $tickets = Ticket::with(['event','user'])
@@ -58,14 +58,16 @@ class TicketController extends Controller
     public function store(StoreTicketRequest $request)
     {
         try {
-           $user = User::first();
-           if (!$user){
-            return response()->json([
-                'success' =>false ,
-                'message' => 'Aucun utilisateur trouvé pour testing'
-            ],400);
-           }
+           $user = Auth::user();
+           
+           
             $event = Event::findOrFail($request->event_id);
+             if (!$event) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Événement non trouvé'
+                ], 404);
+            }
             $ticketsCount = Ticket::where('event_id', $event->id)->count();
             if ($ticketsCount >= $event->capacite){
                 return response()->json([
@@ -82,6 +84,17 @@ class TicketController extends Controller
                     'message' => 'vous avez deja un billet pour cet evenement '
                 ],400);
             }
+
+            $existingTicket = Ticket::where('user_id', $user->id)
+                ->where('event_id', $event->id)
+                ->first();
+
+            if ($existingTicket) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Vous avez déjà un billet pour cet événement'
+                ], 400);
+            }
             $qrCode = 'TICKET-' . Str::upper(Str::random(10)) . '-' . time();
 
             $ticket = Ticket::create([
@@ -91,6 +104,8 @@ class TicketController extends Controller
                 'event_id' => $event->id,
                 'pdf_path' => null
             ]);
+
+            $ticket->load('event');
             event(new TicketPurchased($ticket));
             return response()->json([
                 'success' => true,
@@ -112,11 +127,11 @@ class TicketController extends Controller
     public function show(Ticket $ticket)
     {
         try {
-            $user = User::first();
+            $user = Auth::user();
            if (!$user){
             return response()->json([
                 'success' =>false ,
-                'message' => 'Aucun utilisateur trouvé pour testing'
+                'message' => 'Utilisateur non connecté'
             ],400);
            }
             if ( $user -> role !== 'admin'  && $ticket->user_id !== $user->id){
@@ -142,10 +157,8 @@ class TicketController extends Controller
      */
     public function update(UpdateTicketRequest $request, Ticket $ticket)
     {
-        return response()->json([
-            'success' => false,
-            'message' => 'modification des billets non autorise'
-        ], 403);
+        return [
+        ];
     }
 
     /**
@@ -154,12 +167,12 @@ class TicketController extends Controller
     public function destroy(Ticket $ticket)
     {
         try {
-            $user = User::first();
+            $user = Auth::user();
            if (!$user){
             return response()->json([
                 'success' =>false ,
-                'message' => 'Aucun utilisateur trouvé pour testing'
-            ],400);
+                'message' => 'Utilisateur non connecté'
+            ],401);
            }
 
             if ($user->role !== 'admin'){
@@ -187,12 +200,12 @@ class TicketController extends Controller
     public function downloadPdf(Ticket $ticket)
     {
         try{
-            $user = User::first();
+            $user = Auth::user();
            if (!$user){
             return response()->json([
                 'success' =>false ,
-                'message' => 'Aucun utilisateur trouvé pour testing'
-            ],400);
+                'message' => 'Utilisateur non connecté'
+            ],401);
            }
             if ( $user -> role !== 'admin'  && $ticket->user_id !== $user->id){
                 return response ()->json([
@@ -215,12 +228,12 @@ class TicketController extends Controller
     public function getEventTickets($eventId)
     {
         try {
-           $user = User::first();
+           $user = Auth::user();
            if (!$user){
             return response()->json([
                 'success' =>false ,
-                'message' => 'Aucun utilisateur trouvé pour testing'
-            ],400);
+                'message' => 'Utilisateur non connecté'
+            ],401);
            }
             if ($user -> role !== 'admin'){
                 return response()->json([
@@ -246,6 +259,7 @@ class TicketController extends Controller
         }
     }
     private function generatePdf(Ticket $ticket){
+        $ticket->load(['event', 'user']);
         $content = "
         BILLET D'ENTRÉE
         ===============
@@ -262,7 +276,7 @@ class TicketController extends Controller
         
         Porteur:
         --------
-        Nom: {$ticket->user->name}
+        Nom: {$ticket->user->nom} {$ticket->user->prenom}
         Email: {$ticket->user->email}
         
         IMPORTANT: Présentez ce billet à l'entrée
