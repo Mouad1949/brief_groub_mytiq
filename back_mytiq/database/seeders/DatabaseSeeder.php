@@ -39,6 +39,8 @@ User::factory(1)->create()->each(function ($admin) {
         });
     });
 
+ 
+
     }
     
 
