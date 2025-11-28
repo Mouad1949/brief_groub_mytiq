@@ -26,9 +26,13 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 //     Route::get('/events/{event}/tickets',[TicketController::class , 'getEventTickets']);
 // });
 // Route temporaire sans auth pour testing
-Route::apiResource('tickets', TicketController::class);
+
+Route::middleware(['auth:sanctum'])->group(function () {
+    Route::apiResource('tickets', TicketController::class);
 Route::get('/tickets/{ticket}/download', [TicketController::class, 'downloadPdf']);
 Route::get('/events/{event}/tickets', [TicketController::class, 'getEventTickets']);
+    
+});
 
 Route::post('/users/register',[AuthController::class , 'register']);
 Route::post('/users/login',[AuthController::class , 'login']);

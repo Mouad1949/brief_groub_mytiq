@@ -14,11 +14,11 @@ return new class extends Migration
         Schema::create('events', function (Blueprint $table) {
             $table->id();
             $table->string('title');
-            $table->string('description');
+            $table->string('description',500)->nullable();
             $table->string('localisation');
             $table->dateTime('date');
             $table->integer('capacite');
-            $table->string('image');
+            $table->string('image')->nullable();
             $table->string('prix');
             $table->enum('status', ['pending', 'confirmed', 'cancelled'])->default('pending');
             $table->foreignId('admin_id')->references('id')->on('users');

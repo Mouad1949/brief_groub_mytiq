@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('tickets', function (Blueprint $table) {
             $table->id();
             $table->string('qr_code');
-            $table->string('pdf_path');
+            $table->string('pdf_path')->nullable();
             $table->timestamp('purchase_date');
             $table->foreignId('user_id')->references('id')->on('users');
             $table->foreignId('event_id')->references('id')->on('events');
