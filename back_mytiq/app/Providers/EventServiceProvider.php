@@ -7,8 +7,13 @@ use App\Events\RegisterEvent;
 use App\Events\TicketPurchased;
 use App\Listeners\EventListener;
 <<<<<<< HEAD
+<<<<<<< HEAD
 use App\Listeners\SendTicketConfirmation;
 =======
+use App\Listeners\NewsListener;
+>>>>>>> main
+=======
+use App\Listeners\SendTicketConfirmation;
 use App\Listeners\NewsListener;
 >>>>>>> main
 use Illuminate\Auth\Events\Registered;
@@ -29,8 +34,14 @@ class EventServiceProvider extends ServiceProvider
         ],
         RegisterEvent::class => [EventListener::class],
 <<<<<<< HEAD
+<<<<<<< HEAD
         TicketPurchased::class => [SendTicketConfirmation::class]
 =======
+
+        NewsEvent::class=>[NewsListener::class],
+>>>>>>> main
+=======
+        TicketPurchased::class => [SendTicketConfirmation::class]
 
         NewsEvent::class=>[NewsListener::class],
 >>>>>>> main
