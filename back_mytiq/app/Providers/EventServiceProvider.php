@@ -2,10 +2,12 @@
 
 namespace App\Providers;
 
+use App\Events\NewsEvent;
 use App\Events\RegisterEvent;
 use App\Events\TicketPurchased;
 use App\Listeners\EventListener;
 use App\Listeners\SendTicketConfirmation;
+use App\Listeners\NewsListener;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Auth\Listeners\SendEmailVerificationNotification;
 use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
@@ -24,6 +26,8 @@ class EventServiceProvider extends ServiceProvider
         ],
         RegisterEvent::class => [EventListener::class],
         TicketPurchased::class => [SendTicketConfirmation::class]
+
+        NewsEvent::class=>[NewsListener::class],
     ];
 
     /**
