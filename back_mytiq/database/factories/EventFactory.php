@@ -20,7 +20,7 @@ class EventFactory extends Factory
     {
         return [
           'title'        => fake()->sentence(3),
-          'description'  => fake()->paragraph(3),
+          'description'  => fake()->paragraph(),
           'localisation' => fake()->city(),
           'date'         => fake()->dateTimeBetween('+1 days', '+2 months'),
           'capacite'     => fake()->numberBetween(50, 500),
