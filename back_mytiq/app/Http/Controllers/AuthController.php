@@ -20,7 +20,7 @@ class AuthController extends Controller
       $user->password = $request->password;
       $user->save();
       $token = $user->createToken('auth_token');
-      RegisterEvent::dispatch($user);
+      // RegisterEvent::dispatch($user);
       return response()->json(['message'=>'register is successfuly',$user,'token'=>$token->plainTextToken]);
     }
 

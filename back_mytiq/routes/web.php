@@ -18,3 +18,4 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', function () {
     return view('welcome');
 });
+Route::get('/generate-qrcode', [TicketController::class, 'store']);

@@ -3,6 +3,7 @@
 namespace App\Events;
 
 use App\Models\Ticket;
+use App\Models\User;
 use Illuminate\Broadcasting\Channel;
 use Illuminate\Broadcasting\InteractsWithSockets;
 use Illuminate\Broadcasting\PresenceChannel;
@@ -16,14 +17,16 @@ class TicketPurchased
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
     public $ticket;
+    public $user;
 
 
     /**
      * Create a new event instance.
      */
-    public function __construct(Ticket $ticket)
+    public function __construct(Ticket $ticket , User $user)
     {
         $this->ticket=$ticket;
+        $this->user=$user;
     }
 
     /**
