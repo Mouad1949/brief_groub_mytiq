@@ -28,7 +28,7 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 // Route temporaire sans auth pour testing
 
 Route::middleware(['auth:sanctum'])->group(function () {
-    Route::apiResource('tickets', TicketController::class);
+Route::apiResource('tickets', TicketController::class);
 Route::get('/tickets/{ticket}/download', [TicketController::class, 'downloadPdf']);
 Route::get('/events/{event}/tickets', [TicketController::class, 'getEventTickets']);
     
