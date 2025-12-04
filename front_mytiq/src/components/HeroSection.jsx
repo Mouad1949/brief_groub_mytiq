@@ -2,17 +2,18 @@ import React from "react";
 
 const HeroSection = () => {
   return (
-    <section className="w-full bg-[#f7f7f7] py-14 mt-[80px]">
-      <div className="max-w-6xl mx-auto px-5">
+    <section className="w-full pt-0" style={{ backgroundColor: "#f8f8f8" }}>
+      <div className="max-w-7xl mx-auto px-6 py-6 md:py-8">
         
-        {/* Title */}
-        <h1 className="text-4xl font-bold text-black leading-tight">
-          Discover <span className="text-[#0084c7]">Premium Events</span>
+        {/* TITLE */}
+        <h1 className="text-3xl md:text-4xl font-bold text-left text-black leading-tight">
+          Discover <span className="text-[#0062BD]">Premium</span>{" "}
+          <span className="text-[#00B1CA]">Events</span>
         </h1>
 
-        {/* Subtitle */}
-        <p className="text-sm text-gray-600 mt-2 max-w-md">
-          Browse and book tickets to the best conferences and workshops.
+        {/* DESCRIPTION */}
+        <p className="text-gray-600 text-sm md:text-base text-left mt-2 max-w-2xl">
+          Browse and book tickets to the best conferences and workshops
         </p>
 
       </div>
