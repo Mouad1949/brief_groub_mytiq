@@ -1,18 +1,27 @@
-import React from 'react';
-import { BrowserRouter as Router } from 'react-router-dom';
+
+
+import { Route, Routes } from 'react-router-dom'
+import './App.css'
+import Register from './pages/Register'
+import Login from './pages/Login'
+import Ticket from './pages/Ticket'
+import ProtectedRoute from './Component/ProtectedPage'
+import Events from './pages/events'
 import Navbar from './components/Navbar';
-import './App.css';
 
 function App() {
+
   return (
-    <Router>
-      <div className="App">
-        <Navbar />
-          <h1>Contenu de la page</h1>
-          <p>La navbar est maintenant pleine largeur avec le dégradé correct !</p>
-      </div>
-    </Router>
-  );
+    <>
+    <Routes>
+      <Route path='/register' element={<Register />} />
+      <Route path='/login' element={<Login />} />
+      <Route path='/tickets' element={<ProtectedRoute allowedRole="admin"><Ticket /></ProtectedRoute>} />
+      <Route path='/events' element={<ProtectedRoute allowedRole="user"><Events /></ProtectedRoute>} />
+      <Route path="/" element={<HomePage />} />
+    </Routes>
+    </>
+  )
 }
 
 export default App;
