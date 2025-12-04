@@ -33,7 +33,7 @@ function ComponentLogin() {
         }
         
       }catch(err){
-        setError(err.response.data.message || 'Login failed')
+        setError(err.message || 'Login failed')
       }
     }
   return (

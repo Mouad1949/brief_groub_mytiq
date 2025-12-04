@@ -4,8 +4,6 @@ const HeroSection = () => {
   return (
     <section className="w-full bg-[#f7f7f7] py-14 mt-[80px]">
       <div className="max-w-6xl mx-auto px-5">
-        
-        {/* Title */}
         <h1 className="text-4xl font-bold text-black leading-tight">
           Discover <span className="text-[#0084c7]">Premium Events</span>
         </h1>
