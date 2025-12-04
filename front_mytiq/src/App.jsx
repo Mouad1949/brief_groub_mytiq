@@ -1,4 +1,5 @@
 
+
 import { Route, Routes } from 'react-router-dom'
 import './App.css'
 import Register from './pages/Register'
@@ -6,6 +7,7 @@ import Login from './pages/Login'
 import Ticket from './pages/Ticket'
 import ProtectedRoute from './Component/ProtectedPage'
 import Events from './pages/events'
+import Navbar from './components/Navbar';
 
 function App() {
 
@@ -16,9 +18,10 @@ function App() {
       <Route path='/login' element={<Login />} />
       <Route path='/tickets' element={<ProtectedRoute allowedRole="admin"><Ticket /></ProtectedRoute>} />
       <Route path='/events' element={<ProtectedRoute allowedRole="user"><Events /></ProtectedRoute>} />
+      <Route path="/" element={<HomePage />} />
     </Routes>
     </>
   )
 }
 
-export default App
+export default App;
