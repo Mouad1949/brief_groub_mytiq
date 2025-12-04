@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('tickets', function (Blueprint $table) {
             $table->id();
-            $table->string('qr_code');
+            $table->string('qr_code')->nullable();
             $table->string('pdf_path')->nullable();
             $table->timestamp('purchase_date');
             $table->foreignId('user_id')->references('id')->on('users');

@@ -13,6 +13,8 @@ use App\Http\Requests\StoreTicketRequest;
 use App\Http\Requests\UpdateTicketRequest;
 use App\Events\TicketPurchased;
 use GrahamCampbell\ResultType\Success;
+use SimpleSoftwareIO\QrCode\Facades\QrCode;
+use SimpleSoftwareIO\QrCode\Generator;
 
 class TicketController extends Controller
 {
@@ -23,13 +25,6 @@ class TicketController extends Controller
     {
         try{
             $user = Auth::user();
-
-            if (!$user){
-                return response()->json([
-                    'success' => false,
-                    'message' => 'Utilisateur non connecté'
-                ],401);
-            }
             if ($user -> role === 'admin'){
                 $tickets = Ticket::with(['event','user'])
                 ->orderBy('purchase_date','desc')
@@ -59,8 +54,6 @@ class TicketController extends Controller
     {
         try {
            $user = Auth::user();
-           
-           
             $event = Event::findOrFail($request->event_id);
              if (!$event) {
                 return response()->json([
@@ -84,29 +77,32 @@ class TicketController extends Controller
                     'message' => 'vous avez deja un billet pour cet evenement '
                 ],400);
             }
+          $qrCode = 'TICKET-' . Str::upper(Str::random(10)) . '-' . time();
 
-            $existingTicket = Ticket::where('user_id', $user->id)
-                ->where('event_id', $event->id)
-                ->first();
+          $ticket = Ticket::create([
+            'qr_code' => $qrCode,
+            'purchase_date' => now(),
+            'user_id' => $user->id,
+            'event_id' => $event->id,
+            'pdf_path' => null
+        ]);
 
-            if ($existingTicket) {
-                return response()->json([
-                    'success' => false,
-                    'message' => 'Vous avez déjà un billet pour cet événement'
-                ], 400);
-            }
-            $qrCode = 'TICKET-' . Str::upper(Str::random(10)) . '-' . time();
+        // $qrData = "TICKET-{$ticket->id} | USER-{$ticket->user_id} | EVENT-{$ticket->event_id}";
+        // $qrPath = "qr/ticket_{$ticket->id}.png";
 
-            $ticket = Ticket::create([
-                'qr_code' => $qrCode,
-                'purchase_date'=> now(),
-                'user_id' => $user->id,
-                'event_id' => $event->id,
-                'pdf_path' => null
-            ]);
+        // $qr = new Generator;
+        // $qrImage = $qr->format('png')->size(300)->generate($qrData); // ✔ Forces GD → No Imagick
+
+        // \Storage::disk('public')->put($qrPath, $qrImage);
+
+        // $ticket->update([
+        //     'qr_code' => $qrPath,
+        // ]);
+
+
 
             $ticket->load('event');
-            event(new TicketPurchased($ticket));
+            // event(new TicketPurchased($ticket,$user));
             return response()->json([
                 'success' => true,
                 'message' => 'Billet achete avec succes!',
@@ -128,12 +124,6 @@ class TicketController extends Controller
     {
         try {
             $user = Auth::user();
-           if (!$user){
-            return response()->json([
-                'success' =>false ,
-                'message' => 'Utilisateur non connecté'
-            ],400);
-           }
             if ( $user -> role !== 'admin'  && $ticket->user_id !== $user->id){
                 return response()->json([
                     'success'=> false,
@@ -157,56 +147,49 @@ class TicketController extends Controller
      */
     public function update(UpdateTicketRequest $request, Ticket $ticket)
     {
-        return [
-        ];
+        // 
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Ticket $ticket)
-    {
-        try {
-            $user = Auth::user();
-           if (!$user){
-            return response()->json([
-                'success' =>false ,
-                'message' => 'Utilisateur non connecté'
-            ],401);
-           }
+    // public function destroy(Ticket $ticket)
+    // {
+    //     try {
+    //         $user = Auth::user();
+    //        if (!$user){
+    //         return response()->json([
+    //             'success' =>false ,
+    //             'message' => 'Utilisateur non connecté'
+    //         ],401);
+    //        }
 
-            if ($user->role !== 'admin'){
-                return response()->json([
-                    'success'=>false,
-                    'message' => 'action non autorisee'
-                ],403);
-            }
-            if ($ticket->pdf_path  && Storage::exists($ticket->pdf_path) ){
-                Storage::delete($ticket->pdf_path);
-            }
-            $ticket->delete();
-            return response()->json([
-                'success'=> true,
-                'message'=> 'billet supprime avec succes'
-            ]);
+    //         if ($user->role !== 'admin'){
+    //             return response()->json([
+    //                 'success'=>false,
+    //                 'message' => 'action non autorisee'
+    //             ],403);
+    //         }
+    //         if ($ticket->pdf_path  && Storage::exists($ticket->pdf_path) ){
+    //             Storage::delete($ticket->pdf_path);
+    //         }
+    //         $ticket->delete();
+    //         return response()->json([
+    //             'success'=> true,
+    //             'message'=> 'billet supprime avec succes'
+    //         ]);
 
-        }catch (\Exception $e){
-            return response()->json([
-                'success' => false ,
-                'message' => 'Erreur lors de la suppression: ' . $e->getMessage()
-            ],500);
-        }
-    }
+    //     }catch (\Exception $e){
+    //         return response()->json([
+    //             'success' => false ,
+    //             'message' => 'Erreur lors de la suppression: ' . $e->getMessage()
+    //         ],500);
+    //     }
+    // }
     public function downloadPdf(Ticket $ticket)
     {
         try{
             $user = Auth::user();
-           if (!$user){
-            return response()->json([
-                'success' =>false ,
-                'message' => 'Utilisateur non connecté'
-            ],401);
-           }
             if ( $user -> role !== 'admin'  && $ticket->user_id !== $user->id){
                 return response ()->json([
                     'success' => false,
