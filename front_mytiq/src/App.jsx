@@ -10,6 +10,8 @@ import HomePage from './pages/HomePage'
 import Navbar from './components/Navbar';
 import Dashbord from './pages/Dashbord'
 import ErrorSection7 from './components/authorized'
+import EventDetailsPage from './pages/EventDetailsPage';
+
 
 function App() {
 
@@ -18,6 +20,7 @@ function App() {
   <Navbar />
       <Routes>
         <Route path="/" element={<HomePage />} />
+         <Route path="/event/:id" element={<EventDetailsPage />} />
         <Route path="/register" element={<Register />} />
         <Route path="/login" element={<Login />} />
          <Route path="/not-authorized" element={<ErrorSection7 />} />
@@ -39,7 +42,6 @@ function App() {
           }
         />
       </Routes>
-
     </>
   )
 }

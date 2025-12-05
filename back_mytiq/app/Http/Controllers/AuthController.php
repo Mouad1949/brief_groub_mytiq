@@ -36,8 +36,20 @@ public function login(Request $request)
 
     $user = User::where('email', $request->email)->first();
 
+<<<<<<< HEAD
     if (!$user) {
         return response()->json(['message' => 'Email not found'], 404);
+=======
+      if(!Auth::attempt($request->only('email','password'))){
+        return response()->json([
+          'message'=> "invalid login",
+        ]);
+      }
+      $user = User::where('email',$request->email)->firstOrFail();
+
+      $token = $user->createToken('auth_token');
+      return response()->json(['messges'=>'login is successfuly' ,'user'=>$user->role ,'token'=>$token->plainTextToken]);
+>>>>>>> abf73944e8bd288a62e6c5941747468986f0ae8b
     }
 
     if (!Hash::check($request->password, $user->password)) {
