@@ -23,13 +23,15 @@ function ComponentLogin() {
         const res = await axios.post('http://127.0.0.1:8000/api/users/login' ,{email,password})
 
         const token = res.data.token;
+        const role = res.data.user;
         localStorage.setItem('auth_token' ,token);
-        const userRole = res.data.user.role;
-        setRole(userRole);
-        if(userRole === 'admin'){
+        localStorage.setItem('role' ,role);
+        // const userRole = res.data.user.role;
+        setRole(role);
+        if(role === 'admin'){
             navigate('/tickets')
         }else{
-          navigate('/events')
+          navigate('/')
         }
         
       }catch(err){

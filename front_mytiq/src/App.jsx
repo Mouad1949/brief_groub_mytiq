@@ -14,12 +14,13 @@ function App() {
 
   return (
     <>
+    <Navbar />
     <Routes>
-      <Navbar />
+      
       <Route path='/register' element={<Register />} />
       <Route path='/login' element={<Login />} />
       <Route path='/tickets' element={<ProtectedRoute allowedRole="admin"><Ticket /></ProtectedRoute>} />
-      <Route path='/events' element={<ProtectedRoute allowedRole="user"><Events /></ProtectedRoute>} />
+      {/* <Route path='/event/:id' element={<ProtectedRoute allowedRole="user"><EventDetailsPage /></ProtectedRoute>} /> */}
       <Route path="/event/:id" element={<EventDetailsPage />} />
       <Route path="/" element={<HomePage/>}/>
     </Routes>

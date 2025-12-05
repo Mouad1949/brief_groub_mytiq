@@ -45,10 +45,11 @@ Route::middleware(['auth:sanctum', 'admin'])->group(function () {
     Route::put('evenements/{id}/edit', [EventController::class, 'update']);
     Route::delete('evenements/{id}/delete', [EventController::class, 'destroy']);
     
+    
 });
-
-Route::get('evenements',[EventController::class ,'index']);
 Route::get('evenements/{id}/show', [EventController::class, 'show']);
+Route::get('evenements',[EventController::class ,'index']);
+
 
 
 Route::post('/newsletter/subscribe', [NewsletterController::class, 'subscribe']);
