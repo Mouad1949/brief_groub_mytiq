@@ -5,11 +5,9 @@ import './App.css'
 import Register from './pages/Register'
 import Login from './pages/Login'
 import Ticket from './pages/Ticket'
-import ProtectedRoute from './Component/ProtectedPage'
-import Events from './pages/events'
+import ProtectedRoute from './utils/ProtectedPage'
 import HomePage from './pages/HomePage'
 import Navbar from './components/Navbar';
-import Home from './pages/HomePage'
 import Dashbord from './pages/Dashbord'
 import ErrorSection7 from './components/authorized'
 
@@ -22,7 +20,6 @@ function App() {
         <Route path="/" element={<HomePage />} />
         <Route path="/register" element={<Register />} />
         <Route path="/login" element={<Login />} />
-        <Route path="/" element={<HomePage />} />
          <Route path="/not-authorized" element={<ErrorSection7 />} />
         <Route 
           path="/my-tickets" 

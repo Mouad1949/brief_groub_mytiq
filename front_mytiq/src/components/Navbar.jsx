@@ -9,13 +9,13 @@ const Navbar = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    const savedRole = localStorage.getItem("user_role");
+    const savedRole = localStorage.getItem("role");
     setRole(savedRole);
   }, []);
 
   const handleLogout = () => {
     localStorage.removeItem("auth_token");
-    localStorage.removeItem("user_role");
+    localStorage.removeItem("role");
     setRole(null);
     navigate("/login");
     setIsMenuOpen(false);
@@ -47,6 +47,7 @@ const Navbar = () => {
             </>
           ) : (
             <>
+              <Link to="/" onClick={closeMenu}>Events</Link>
               <Link className="btn-outline" to="/login" onClick={closeMenu}>Login</Link>
               <Link className="btn-solid" to="/register" onClick={closeMenu}>Register</Link>
             </>
