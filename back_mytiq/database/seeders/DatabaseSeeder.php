@@ -26,18 +26,25 @@ class DatabaseSeeder extends Seeder
         //     'email' => 'test@example.com',
         // ]);
         // $this->call([TicketSeeder::class]);
-User::factory(1)->create()->each(function ($admin) {
-        $events = Event::factory(10)->create([
-            'admin_id' => $admin->id
-        ]);
-        $events->each(function ($event) {
-            Ticket::factory(20)->create([
-                'event_id' => $event->id,
-                'user_id'  => User::inRandomOrder()->first()->id
-            ]);
+$admin = User::factory()->create([
+    'role' => 'admin',
+]);
 
-        });
-    });
+
+$users = User::factory(10)->create();
+
+
+$events = Event::factory(10)->create([
+    'admin_id' => $admin->id,
+]);
+
+
+$events->each(function ($event) use ($users) {
+    Ticket::factory(10)->create([
+        'event_id' => $event->id,
+        'user_id'  => $users->random()->id,
+    ]);
+});
 
     }
     
