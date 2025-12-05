@@ -40,7 +40,7 @@ class AuthController extends Controller
       $user = User::where('email',$request->email)->firstOrFail();
 
       $token = $user->createToken('auth_token');
-      return response()->json(['messges'=>'login is successfuly' ,'user'=>$user ,'token'=>$token->plainTextToken]);
+      return response()->json(['messges'=>'login is successfuly' ,'user'=>$user->role ,'token'=>$token->plainTextToken]);
     }
 
     // function logout
