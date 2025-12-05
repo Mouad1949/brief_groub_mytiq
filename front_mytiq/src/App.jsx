@@ -6,8 +6,9 @@ import Register from './pages/Register'
 import Login from './pages/Login'
 import Ticket from './pages/Ticket'
 import ProtectedRoute from './Component/ProtectedPage'
-import Events from './pages/events'
 import Navbar from './components/Navbar';
+import HomePage from './pages/HomePage';
+import EventDetailsPage from './pages/EventDetailsPage';
 
 function App() {
 
@@ -19,7 +20,8 @@ function App() {
       <Route path='/login' element={<Login />} />
       <Route path='/tickets' element={<ProtectedRoute allowedRole="admin"><Ticket /></ProtectedRoute>} />
       <Route path='/events' element={<ProtectedRoute allowedRole="user"><Events /></ProtectedRoute>} />
-      <Route path="/" element={<HomePage />} />
+      <Route path="/event/:id" element={<EventDetailsPage />} />
+      <Route path="/" element={<HomePage/>}/>
     </Routes>
     </>
   )
