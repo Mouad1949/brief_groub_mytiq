@@ -86,10 +86,9 @@ const EventsGrid = () => {
     const fetchEvents = async () => {
       try {
         setLoading(true);
-        // APPEL API CORRIGÉ :
+
         const response = await eventAPI.getAll();
-        
-        // Votre API retourne probablement { success: true, events: [...] }
+
         let eventsData = [];
         
         if (response.data && response.data.success) {

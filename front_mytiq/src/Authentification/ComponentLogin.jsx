@@ -26,7 +26,7 @@ function ComponentLogin() {
         const role = res.data.user;
         localStorage.setItem('auth_token' ,token);
         localStorage.setItem('role' ,role);
-        // const userRole = res.data.user.role;
+  
         setRole(role);
         if(role === 'admin'){
             navigate('/tickets')
@@ -35,7 +35,7 @@ function ComponentLogin() {
         }
         
       }catch(err){
-        setError(err.response.data.message || 'Login failed')
+        setError(err.data?.user?.message || 'Login failed')
       }
     }
   return (

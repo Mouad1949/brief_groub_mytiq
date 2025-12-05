@@ -5,6 +5,7 @@ import App from './App.jsx'
 import { BrowserRouter } from 'react-router-dom'
 import { RoleProvider } from './context/RoleContext.jsx'
 
+
 createRoot(document.getElementById('root')).render(
   <StrictMode>
     <RoleProvider>
