@@ -21,6 +21,7 @@ const EventDetailsPage = () => {
       setLoading(true);
       const response = await eventAPI.getById(id);
       setEvent(response.data.event || response.data);
+      console.log(response)
     } catch (err) {
       setError('Erreur lors du chargement de l\'événement');
       console.error(err);
@@ -37,14 +38,61 @@ const EventDetailsPage = () => {
     return calculateSubtotal();
   };
 
+  // ===== NOUVELLE FONCTION D'ACHAT =====
   const handleBuyTickets = async () => {
     try {
-      console.log('Achat de', ticketCount, 'tickets pour événement', id);
-      alert(`Achat réussi ! ${ticketCount} ticket(s) acheté(s).`);
-    } catch (err) {
-      console.error('Erreur achat:', err);
+      // Vérifier si l'utilisateur est connecté
+      const token = localStorage.getItem('auth_token');
+      if (!token) {
+        alert('Veuillez vous connecter pour acheter un ticket');
+        navigate('/login');
+        return;
+      }
+
+      // Importer ticketAPI dynamiquement pour éviter les erreurs d'import
+      const { ticketAPI } = await import('../services/api');
+      
+      // Acheter le ticket
+      const purchaseResponse = await ticketAPI.purchase(event.id);
+      
+      if (purchaseResponse.data.success) {
+        const ticketId = purchaseResponse.data.ticket?.id;
+        
+        // Télécharger le PDF
+        if (ticketId) {
+          const pdfResponse = await ticketAPI.downloadPdf(ticketId);
+          
+          // Créer un lien de téléchargement
+          const url = window.URL.createObjectURL(new Blob([pdfResponse.data]));
+          const link = document.createElement('a');
+          link.href = url;
+          link.setAttribute('download', `ticket-${ticketId}.pdf`);
+          document.body.appendChild(link);
+          link.click();
+          link.remove();
+          
+          alert(`Ticket acheté avec succès ! PDF téléchargé.`);
+        } else {
+          alert('Ticket acheté avec succès !');
+        }
+      } else {
+        alert(purchaseResponse.data.message || 'Erreur lors de l\'achat');
+      }
+      
+    } catch (error) {
+      console.error('Erreur achat:', error);
+      
+      // Messages d'erreur spécifiques
+      if (error.response?.status === 400) {
+        alert(error.response.data?.message || 'Erreur: capacité complète ou déjà un billet');
+      } else if (error.response?.status === 401) {
+        alert('Session expirée. Veuillez vous reconnecter.');
+      } else {
+        alert('Erreur lors de l\'achat du ticket');
+      }
     }
   };
+  // ===== FIN NOUVELLE FONCTION =====
 
   if (loading) {
     return (
