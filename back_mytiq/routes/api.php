@@ -3,6 +3,7 @@
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\EventController;
 use App\Http\Controllers\NewsletterController;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\TicketController;
@@ -45,11 +46,14 @@ Route::middleware(['auth:sanctum', 'admin'])->group(function () {
     Route::put('evenements/{id}/edit', [EventController::class, 'update']);
     Route::delete('evenements/{id}/delete', [EventController::class, 'destroy']);
     
+    
 });
-
-Route::get('evenements',[EventController::class ,'index']);
 Route::get('evenements/{id}/show', [EventController::class, 'show']);
+Route::get('evenements',[EventController::class ,'index']);
+
 
 
 Route::post('/newsletter/subscribe', [NewsletterController::class, 'subscribe']);
 Route::get('/newsletter/confirm/{token}', [NewsletterController::class, 'confirm']);
+
+Route::get('/verify-token', [AuthController::class ,'verifyToken']);
