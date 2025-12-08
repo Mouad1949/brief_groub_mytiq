@@ -1,6 +1,7 @@
-
-
-import { Route, Routes } from 'react-router-dom'
+import React from 'react';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import AddEventPage from './pages/AddEventPage';
+import DashboardPage from './pages/DashboardPage';
 import './App.css'
 import Register from './pages/Register'
 import Login from './pages/Login'
@@ -37,13 +38,22 @@ function App() {
           path="/dashboard" 
           element={
             <ProtectedRoute allowedRole="admin">
-              <Dashbord />
+              <DashboardPage />
+            </ProtectedRoute>
+          }
+        />
+           <Route 
+          path="/add-event" 
+          element={
+            <ProtectedRoute allowedRole="admin">
+              <AddEventPage />
             </ProtectedRoute>
           }
         />
       </Routes>
     </>
   )
+
 }
 
 export default App;
